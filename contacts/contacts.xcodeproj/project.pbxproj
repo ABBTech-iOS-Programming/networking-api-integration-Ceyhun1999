@@ -6,46 +6,41 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		98219EE5303CCB480048FC3D /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 98219EE4303CCB480048FC3D /* SDWebImageSwiftUI */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
-		98DDF2F93039C36500BC78D2 /* product_shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = product_shop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9874A88D303AD2C8003B2528 /* contacts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = contacts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		98DDF2FB3039C36500BC78D2 /* product_shop */ = {
+		9874A88F303AD2C8003B2528 /* contacts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = product_shop;
+			path = contacts;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		98DDF2F63039C36500BC78D2 /* Frameworks */ = {
+		9874A88A303AD2C8003B2528 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98219EE5303CCB480048FC3D /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		98DDF2F03039C36500BC78D2 = {
+		9874A884303AD2C8003B2528 = {
 			isa = PBXGroup;
 			children = (
-				98DDF2FB3039C36500BC78D2 /* product_shop */,
-				98DDF2FA3039C36500BC78D2 /* Products */,
+				9874A88F303AD2C8003B2528 /* contacts */,
+				9874A88E303AD2C8003B2528 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		98DDF2FA3039C36500BC78D2 /* Products */ = {
+		9874A88E303AD2C8003B2528 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				98DDF2F93039C36500BC78D2 /* product_shop.app */,
+				9874A88D303AD2C8003B2528 /* contacts.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,68 +48,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		98DDF2F83039C36500BC78D2 /* product_shop */ = {
+		9874A88C303AD2C8003B2528 /* contacts */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 98DDF3043039C36600BC78D2 /* Build configuration list for PBXNativeTarget "product_shop" */;
+			buildConfigurationList = 9874A898303AD2C9003B2528 /* Build configuration list for PBXNativeTarget "contacts" */;
 			buildPhases = (
-				98DDF2F53039C36500BC78D2 /* Sources */,
-				98DDF2F63039C36500BC78D2 /* Frameworks */,
-				98DDF2F73039C36500BC78D2 /* Resources */,
+				9874A889303AD2C8003B2528 /* Sources */,
+				9874A88A303AD2C8003B2528 /* Frameworks */,
+				9874A88B303AD2C8003B2528 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				98DDF2FB3039C36500BC78D2 /* product_shop */,
+				9874A88F303AD2C8003B2528 /* contacts */,
 			);
-			name = product_shop;
+			name = contacts;
 			packageProductDependencies = (
-				98219EE4303CCB480048FC3D /* SDWebImageSwiftUI */,
 			);
-			productName = product_shop;
-			productReference = 98DDF2F93039C36500BC78D2 /* product_shop.app */;
+			productName = contacts;
+			productReference = 9874A88D303AD2C8003B2528 /* contacts.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		98DDF2F13039C36500BC78D2 /* Project object */ = {
+		9874A885303AD2C8003B2528 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
-					98DDF2F83039C36500BC78D2 = {
+					9874A88C303AD2C8003B2528 = {
 						CreatedOnToolsVersion = 26.4;
 					};
 				};
 			};
-			buildConfigurationList = 98DDF2F43039C36500BC78D2 /* Build configuration list for PBXProject "product_shop" */;
+			buildConfigurationList = 9874A888303AD2C8003B2528 /* Build configuration list for PBXProject "contacts" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 98DDF2F03039C36500BC78D2;
+			mainGroup = 9874A884303AD2C8003B2528;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				98219EE3303CCB480048FC3D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 98DDF2FA3039C36500BC78D2 /* Products */;
+			productRefGroup = 9874A88E303AD2C8003B2528 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				98DDF2F83039C36500BC78D2 /* product_shop */,
+				9874A88C303AD2C8003B2528 /* contacts */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		98DDF2F73039C36500BC78D2 /* Resources */ = {
+		9874A88B303AD2C8003B2528 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,7 +115,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		98DDF2F53039C36500BC78D2 /* Sources */ = {
+		9874A889303AD2C8003B2528 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -134,7 +125,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		98DDF3023039C36600BC78D2 /* Debug */ = {
+		9874A896303AD2C9003B2528 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -197,7 +188,7 @@
 			};
 			name = Debug;
 		};
-		98DDF3033039C36600BC78D2 /* Release */ = {
+		9874A897303AD2C9003B2528 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -253,7 +244,7 @@
 			};
 			name = Release;
 		};
-		98DDF3053039C36600BC78D2 /* Debug */ = {
+		9874A899303AD2C9003B2528 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -272,7 +263,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ceyhun.product-shop";
+				PRODUCT_BUNDLE_IDENTIFIER = ceyhun.contacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -284,7 +275,7 @@
 			};
 			name = Debug;
 		};
-		98DDF3063039C36600BC78D2 /* Release */ = {
+		9874A89A303AD2C9003B2528 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -303,7 +294,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ceyhun.product-shop";
+				PRODUCT_BUNDLE_IDENTIFIER = ceyhun.contacts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -318,44 +309,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		98DDF2F43039C36500BC78D2 /* Build configuration list for PBXProject "product_shop" */ = {
+		9874A888303AD2C8003B2528 /* Build configuration list for PBXProject "contacts" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				98DDF3023039C36600BC78D2 /* Debug */,
-				98DDF3033039C36600BC78D2 /* Release */,
+				9874A896303AD2C9003B2528 /* Debug */,
+				9874A897303AD2C9003B2528 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		98DDF3043039C36600BC78D2 /* Build configuration list for PBXNativeTarget "product_shop" */ = {
+		9874A898303AD2C9003B2528 /* Build configuration list for PBXNativeTarget "contacts" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				98DDF3053039C36600BC78D2 /* Debug */,
-				98DDF3063039C36600BC78D2 /* Release */,
+				9874A899303AD2C9003B2528 /* Debug */,
+				9874A89A303AD2C9003B2528 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		98219EE3303CCB480048FC3D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.1.4;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		98219EE4303CCB480048FC3D /* SDWebImageSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 98219EE3303CCB480048FC3D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 98DDF2F13039C36500BC78D2 /* Project object */;
+	rootObject = 9874A885303AD2C8003B2528 /* Project object */;
 }

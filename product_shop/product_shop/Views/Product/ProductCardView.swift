@@ -16,7 +16,7 @@ struct ProductCardView: View {
                 trailing: 6
             )
         )
-        .background(.yellow)
+        .background(.white)
         .clipShape(
             RoundedRectangle(cornerRadius: 18)
         )
@@ -35,7 +35,6 @@ struct ProductCardView: View {
                 .clipShape(
                     RoundedRectangle(cornerRadius: 14)
                 )
-                .background(.red)
 
             Text("★ 4.9")
                 .font(.system(size: 10, weight: .semibold))

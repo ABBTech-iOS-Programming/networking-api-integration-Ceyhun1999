@@ -40,7 +40,12 @@ struct HomeView: View {
                     categoriesList
 
                     ScrollView(.vertical, showsIndicators: false) {
-                        productsGrid
+                        NavigationLink {
+                            ProductDetailView()
+                        } label: {
+                            productsGrid
+                        }
+
                     }
                 }
                 .padding(24)
