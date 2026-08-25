@@ -1,6 +1,9 @@
+import SDWebImageSwiftUI
 import SwiftUI
 
 struct ProductCardView: View {
+
+    let product: Product
 
     var body: some View {
         VStack(spacing: 10) {
@@ -26,17 +29,21 @@ struct ProductCardView: View {
 
     private var productImage: some View {
         ZStack(alignment: .topLeading) {
-            Image(.testProductImage2)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .frame(height: 108)
-                .clipped()
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 14)
-                )
+            WebImage(url: URL(string: product.thumbnail)) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 108)
+            .clipped()
+            .clipShape(
+                RoundedRectangle(cornerRadius: 14)
+            )
 
-            Text("★ 4.9")
+            Text("★ \(product.rating, specifier: "%.1f")")
                 .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(.ratingPrimary)
                 .padding(14)
@@ -47,11 +54,12 @@ struct ProductCardView: View {
 
     private var productInfo: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("Mascara Lash")
+            Text(product.title)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.textPrimary)
+                .multilineTextAlignment(.leading)
 
-            Text("Essence")
+            Text(product.brand ?? "")
                 .font(.system(size: 10, weight: .regular))
                 .foregroundStyle(.textSecondary)
         }
@@ -62,7 +70,7 @@ struct ProductCardView: View {
 
     private var bottomSection: some View {
         HStack {
-            Text("$14.99")
+            Text("$\(product.price, specifier: "%.2f")")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.textPrimary)
 
@@ -93,5 +101,25 @@ struct ProductCardView: View {
 }
 
 #Preview {
-    ProductCardView()
+    ProductCardView(
+        product: Product(
+            id: 1,
+            title: "Essence Mascara Lash Princess",
+            description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects.",
+            category: "beauty",
+            price: 9.99,
+            rating: 2.56,
+            stock: 99,
+            brand: "Essence",
+            images: [
+                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+            ],
+            thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+            reviews: [
+                Review(rating: 3),
+                Review(rating: 4),
+                Review(rating: 5)
+            ]
+        )
+    )
 }

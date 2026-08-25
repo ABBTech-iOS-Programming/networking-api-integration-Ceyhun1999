@@ -7,39 +7,18 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var selectedCategory = "All"
     @State private var navigationViewModel = NavigationViewModel()
+    @State private var productsViewModel = ProductsViewModel()
 
     @FocusState private var isSearchFocused: Bool
 
     // MARK: - Properties
 
-    private let categories = [
-        "All",
-        "Beauty",
-        "Home",
-        "Tech",
-        "Alld",
-        "Beautysf",
-        "Homesd",
-        "Techfsf"
-    ]
-
     private let columns = [
         GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible())
+        GridItem(.flexible()),
     ]
 
-    private let mockProduct = Product(
-        name: "ad",
-        brand: "ad",
-        category: "ad",
-        price: 2,
-        rating: 2,
-        reviewsCount: 2,
-        stock: 2,
-        description: "ad",
-        images: ["ad", "ad"]
-    )
-
+    
     // MARK: - Body
 
     var body: some View {
@@ -51,12 +30,56 @@ struct HomeView: View {
                     heroSection
                     searchBar
                     categoriesList
-                    productsScrollView
+                    content
                 }
-                .padding(.horizontal , 24)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .padding(.horizontal, 24)
+            }
+            .task {
+                await productsViewModel.fetchPosts()
             }
             .navigationDestination(for: Route.self) { route in
                 navigationViewModel.destination(for: route)
+            }
+        }
+    }
+
+    // MARK: - Content
+
+    @ViewBuilder
+    private var content: some View {
+        switch productsViewModel.state {
+
+        case .idle, .loading:
+            ProgressView("Loading")
+
+        case .loaded:
+            productsScrollView
+
+        case .empty:
+            ContentUnavailableView {
+                Label(
+                    "Yenidən cəhd elə",
+                    systemImage: "exclamationmark.triangle"
+                )
+            } description: {
+                Text("No products")
+            }
+
+        case .error(let message):
+            ContentUnavailableView {
+                Label(
+                    "Yenidən cəhd elə",
+                    systemImage: "exclamationmark.triangle"
+                )
+            } description: {
+                Text(message)
+            } actions: {
+                Button("Try again") {
+                    Task {
+                        await productsViewModel.fetchPosts()
+                    }
+                }
             }
         }
     }
@@ -71,28 +94,17 @@ struct HomeView: View {
 
     private var productsGrid: some View {
         LazyVGrid(columns: columns, spacing: 16) {
-            ForEach(0..<6, id: \.self) { _ in
-                productButton
+            ForEach(productsViewModel.products) { product in
+                NavigationLink {
+                    ProductDetailView(product: product)
+                } label: {
+                    ProductCardView(product: product)
+                }
+
             }
         }
     }
 
-    private var productButton: some View {
-        Button {
-            openProductDetail()
-        } label: {
-            ProductCardView()
-        }
-        .buttonStyle(.plain)
-    }
-
-    // MARK: - Navigation
-
-    private func openProductDetail() {
-        navigationViewModel.navigate(
-            to: .productDetail(product: mockProduct)
-        )
-    }
 
     // MARK: - Background
 
@@ -120,6 +132,8 @@ struct HomeView: View {
         )
     }
 
+    // MARK: - Hero Text
+
     private var heroText: some View {
         VStack(alignment: .leading, spacing: 7) {
             Text("Good morning")
@@ -136,6 +150,8 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+
+    // MARK: - Discount Badge
 
     private var discountBadge: some View {
         Text("20% OFF")
@@ -177,13 +193,15 @@ struct HomeView: View {
     private var categoriesList: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 12) {
-                ForEach(categories, id: \.self) { category in
+                ForEach(productsViewModel.categories, id: \.self) { category in
                     categoryButton(category)
                 }
             }
         }
         .fixedSize(horizontal: false, vertical: true)
     }
+
+    // MARK: - Category Button
 
     private func categoryButton(_ categoryName: String) -> some View {
         Button {

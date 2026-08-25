@@ -1,21 +1,23 @@
 import Foundation
 
-struct Product: Identifiable, Hashable {
+struct ProductResponse: Decodable, Hashable {
+    let products: [Product]
+}
 
-    let id = UUID()
-
-    let name: String
-    let brand: String
-    let category: String
-
-    let price: Double
-
-    let rating: Double
-    let reviewsCount: Int
-
-    let stock: Int
-
+struct Product: Decodable, Identifiable, Hashable {
+    let id: Int
+    let title: String
     let description: String
-
+    let category: String
+    let price: Double
+    let rating: Double
+    let stock: Int
+    let brand: String?
     let images: [String]
+    let thumbnail: String
+    let reviews: [Review]
+}
+
+struct Review: Codable, Hashable {
+    let rating: Int
 }

@@ -4,13 +4,8 @@ import SwiftUI
 struct ProductDetailView: View {
 
     let product: Product
-    @State private var selectedPage = 0
 
-    private let images = [
-        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
-        "https://schonmagazine.com/wp-content/uploads/2025/08/baku-2024-2025-_2555168725-scaled.jpeg",
-        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-    ]
+    @State private var selectedPage = 0
 
     var body: some View {
         ScrollView {
@@ -21,11 +16,16 @@ struct ProductDetailView: View {
                 ratingAndStock
                 divider
                 descriptionSection
-                quantitySection
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .scrollIndicators(.hidden)
         .padding(.horizontal, 24)
+        .safeAreaInset(edge: .bottom) {
+            quantitySection
+                .padding(.horizontal, 24)
+                .background(.white)
+        }
         .navigationTitle("Product Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -37,8 +37,8 @@ struct ProductDetailView: View {
 
     private var imageSlider: some View {
         TabView(selection: $selectedPage) {
-            ForEach(images.indices, id: \.self) { index in
-                WebImage(url: URL(string: images[index])) { image in
+            ForEach(product.images.indices, id: \.self) { index in
+                WebImage(url: URL(string: product.images[index])) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -62,7 +62,7 @@ struct ProductDetailView: View {
 
     private var pageIndicator: some View {
         HStack {
-            ForEach(images.indices, id: \.self) { index in
+            ForEach(product.images.indices, id: \.self) { index in
                 Capsule()
                     .frame(
                         width: selectedPage == index ? 18 : 8,
@@ -83,11 +83,11 @@ struct ProductDetailView: View {
 
     private var productInfo: some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text("Essence Mascara Lash Princess")
+            Text(product.title)
                 .foregroundStyle(.textPrimary)
                 .font(.system(size: 20, weight: .bold))
 
-            Text("Beauty • Essence")
+            Text("\(product.category.capitalized) • \(product.brand ?? "")")
                 .foregroundStyle(.textSecondary)
                 .font(.system(size: 12, weight: .medium))
         }
@@ -98,17 +98,17 @@ struct ProductDetailView: View {
 
     private var ratingAndStock: some View {
         HStack {
-            Text("★ 4.9")
+            Text("★ \(product.rating, specifier: "%.1f")")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.ratingPrimary)
 
-            Text("(3 reviews)")
+            Text("(\(product.reviews.count) reviews)")
                 .font(.system(size: 11))
                 .foregroundStyle(.textSecondary)
 
             Spacer()
 
-            Text("In stock: 5")
+            Text("In stock: \(product.stock)")
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.successForeground)
                 .padding(.horizontal, 25)
@@ -135,12 +135,11 @@ struct ProductDetailView: View {
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(.textPrimary)
 
-            Text(
-                "A popular mascara known for volumizing and lengthening effects. Long-lasting and cruelty-free."
-            )
-            .font(.system(size: 12))
-            .foregroundStyle(.textSecondary)
-            .lineSpacing(4)
+            Text(product.description)
+                .font(.system(size: 12))
+                .foregroundStyle(.textSecondary)
+                .lineSpacing(4)
+             
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 18)
@@ -156,7 +155,6 @@ struct ProductDetailView: View {
                 .foregroundStyle(.textPrimary)
 
             quantityControls
-
             priceAndCart
         }
         .padding(.top, 46)
@@ -198,7 +196,7 @@ struct ProductDetailView: View {
                     .font(.system(size: 11))
                     .foregroundStyle(.textSecondary)
 
-                Text("$9.99")
+                Text("$\(product.price, specifier: "%.2f")")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundStyle(.accentPrimary)
             }
@@ -236,3 +234,31 @@ struct ProductDetailView: View {
     }
 }
 
+#Preview {
+    NavigationStack {
+        ProductDetailView(
+            product: Product(
+                id: 1,
+                title: "Essence Mascara Lash Princess",
+                description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
+                category: "beauty",
+                price: 9.99,
+                rating: 2.56,
+                stock: 99,
+                brand: "Essence",
+                images: [
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+                ],
+                thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+                reviews: [
+                    Review(rating: 3),
+                    Review(rating: 4),
+                    Review(rating: 5)
+                ]
+            )
+        )
+    }
+}
