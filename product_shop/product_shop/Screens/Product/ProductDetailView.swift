@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ProductDetailView: View {
 
+    let product: Product
     @State private var selectedPage = 0
 
     private let images = [
@@ -235,8 +236,3 @@ struct ProductDetailView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        ProductDetailView()
-    }
-}

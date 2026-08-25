@@ -6,6 +6,7 @@ struct HomeView: View {
 
     @State private var searchText = ""
     @State private var selectedCategory = "All"
+    @State private var navigationViewModel = NavigationViewModel()
 
     @FocusState private var isSearchFocused: Bool
 
@@ -19,18 +20,30 @@ struct HomeView: View {
         "Alld",
         "Beautysf",
         "Homesd",
-        "Techfsf",
+        "Techfsf"
     ]
 
     private let columns = [
         GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
+
+    private let mockProduct = Product(
+        name: "ad",
+        brand: "ad",
+        category: "ad",
+        price: 2,
+        rating: 2,
+        reviewsCount: 2,
+        stock: 2,
+        description: "ad",
+        images: ["ad", "ad"]
+    )
 
     // MARK: - Body
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationViewModel.path) {
             ZStack {
                 backgroundView
 
@@ -38,27 +51,47 @@ struct HomeView: View {
                     heroSection
                     searchBar
                     categoriesList
-
-                    ScrollView(.vertical, showsIndicators: false) {
-                        NavigationLink {
-                            ProductDetailView()
-                        } label: {
-                            productsGrid
-                        }
-
-                    }
+                    productsScrollView
                 }
-                .padding(24)
+                .padding(.horizontal , 24)
+            }
+            .navigationDestination(for: Route.self) { route in
+                navigationViewModel.destination(for: route)
             }
         }
     }
 
+    // MARK: - Products
+
+    private var productsScrollView: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            productsGrid
+        }
+    }
+
     private var productsGrid: some View {
-        LazyVGrid(columns: columns) {
-            ForEach(0..<6) { index in
-                ProductCardView()
+        LazyVGrid(columns: columns, spacing: 16) {
+            ForEach(0..<6, id: \.self) { _ in
+                productButton
             }
         }
+    }
+
+    private var productButton: some View {
+        Button {
+            openProductDetail()
+        } label: {
+            ProductCardView()
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Navigation
+
+    private func openProductDetail() {
+        navigationViewModel.navigate(
+            to: .productDetail(product: mockProduct)
+        )
     }
 
     // MARK: - Background
@@ -87,8 +120,6 @@ struct HomeView: View {
         )
     }
 
-    // MARK: - Hero Text
-
     private var heroText: some View {
         VStack(alignment: .leading, spacing: 7) {
             Text("Good morning")
@@ -103,10 +134,8 @@ struct HomeView: View {
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(.textOnHeroAccent)
         }
-        .frame(alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
-
-    // MARK: - Discount Badge
 
     private var discountBadge: some View {
         Text("20% OFF")
@@ -118,7 +147,7 @@ struct HomeView: View {
             .clipShape(Capsule())
     }
 
-    // MARK: - Search Bar
+    // MARK: - Search
 
     private var searchBar: some View {
         HStack(spacing: 20) {
@@ -155,9 +184,6 @@ struct HomeView: View {
         }
         .fixedSize(horizontal: false, vertical: true)
     }
-    
-
-    // MARK: - Category Button
 
     private func categoryButton(_ categoryName: String) -> some View {
         Button {
