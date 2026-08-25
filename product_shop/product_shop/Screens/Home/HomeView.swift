@@ -112,6 +112,9 @@ struct HomeView: View {
         ScrollView(.vertical, showsIndicators: false) {
             productsGrid
         }
+        .refreshable {
+               await productsViewModel.fetchPosts()
+           }
     }
 
     private var productsGrid: some View {
