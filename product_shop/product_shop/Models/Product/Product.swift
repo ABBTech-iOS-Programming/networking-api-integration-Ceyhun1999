@@ -9,6 +9,7 @@ struct Product: Decodable, Identifiable, Hashable {
     let title: String
     let description: String
     let category: String
+    let discountPercentage: Double
     let price: Double
     let rating: Double
     let stock: Int

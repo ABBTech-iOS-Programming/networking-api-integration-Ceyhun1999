@@ -2,63 +2,96 @@ import SwiftUI
 
 struct MainTabView: View {
 
+    // MARK: - State
+
     @State private var selectedTab: TabItem = .home
+
     @State private var productsViewModel = ProductsViewModel()
-    @State private var navigationViewModel = NavigationViewModel()
+
+    @State private var homeNavigationViewModel = NavigationViewModel()
+    @State private var favoritesNavigationViewModel = NavigationViewModel()
+    @State private var cartNavigationViewModel = NavigationViewModel()
+
+    // MARK: - Body
 
     var body: some View {
-        NavigationStack(path: $navigationViewModel.path) {
-            TabView(selection: $selectedTab) {
-                Tab(value: .home) {
+        TabView(selection: $selectedTab) {
+
+            // MARK: Home
+
+            Tab(value: .home) {
+                NavigationStack(path: $homeNavigationViewModel.path) {
                     HomeView()
-                } label: {
-                    Image(
-                        systemName: selectedTab == .home
-                            ? "house.fill"
-                            : "house"
-                    )
+                        .navigationDestination(for: Route.self) { route in
+                            homeNavigationViewModel.destination(for: route)
+                        }
                 }
-
-                Tab(value: .favorites) {
-                    FavoritesView()
-                } label: {
-                    Image(
-                        systemName: selectedTab == .favorites
-                            ? "heart.fill"
-                            : "heart"
-                    )
-                }
-
-                Tab(value: .cart) {
-                    Text("Cart")
-                } label: {
-                    Image(
-                        systemName: selectedTab == .cart
-                            ? "square.fill"
-                            : "square"
-                    )
-                }
-
-                Tab(value: .profile) {
-                    Text("Profile")
-                } label: {
-                    Image(
-                        systemName: selectedTab == .profile
-                            ? "circle.fill"
-                            : "circle"
-                    )
-                }
+                .environment(homeNavigationViewModel)
+            } label: {
+                Image(
+                    systemName: selectedTab == .home
+                        ? "house.fill"
+                        : "house"
+                )
             }
-            .tint(.accentPrimary)
-          
-            .navigationDestination(for: Route.self) { route in
-                navigationViewModel.destination(for: route)
+
+            // MARK: Favorites
+
+            Tab(value: .favorites) {
+                NavigationStack(path: $favoritesNavigationViewModel.path) {
+                    FavoritesView()
+                        .navigationDestination(for: Route.self) { route in
+                            favoritesNavigationViewModel.destination(for: route)
+                        }
+                }
+                .environment(favoritesNavigationViewModel)
+            } label: {
+                Image(
+                    systemName: selectedTab == .favorites
+                        ? "heart.fill"
+                        : "heart"
+                )
+            }
+
+            // MARK: Cart
+
+            Tab(value: .cart) {
+                NavigationStack(path: $cartNavigationViewModel.path) {
+                    CartView()
+                        .navigationDestination(for: Route.self) { route in
+                            cartNavigationViewModel.destination(for: route)
+                        }
+                }
+                .environment(cartNavigationViewModel)
+            } label: {
+                Image(
+                    systemName: selectedTab == .cart
+                        ? "square.fill"
+                        : "square"
+                )
+            }
+
+            // MARK: Profile
+
+            Tab(value: .profile) {
+                NavigationStack {
+                    Text("Profile")
+                        .navigationTitle("Profile")
+                }
+            } label: {
+                Image(
+                    systemName: selectedTab == .profile
+                        ? "circle.fill"
+                        : "circle"
+                )
             }
         }
+        .tint(.accentPrimary)
         .environment(productsViewModel)
-        .environment(navigationViewModel)
     }
 }
+
+// MARK: - Tab Item
 
 private enum TabItem {
     case home

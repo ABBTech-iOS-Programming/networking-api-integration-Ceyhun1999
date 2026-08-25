@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FavoritesView: View {
+struct CartView: View {
 
     // MARK: - Environment
 
@@ -21,18 +21,17 @@ struct FavoritesView: View {
             backgroundView
 
             Group {
-                if productsViewModel.favoriteProducts.isEmpty {
+                if productsViewModel.cartProducts.isEmpty {
                     emptyState
                 } else {
-                    favoritesGrid
+                    cartGrid
                 }
             }
         }
-        
-        .navigationTitle("Favorites")
+        .navigationTitle("Cart")
         .navigationBarTitleDisplayMode(.inline)
     }
-    
+
     // MARK: - Background
 
     private var backgroundView: some View {
@@ -45,20 +44,20 @@ struct FavoritesView: View {
     private var emptyState: some View {
         ContentUnavailableView {
             Label(
-                "No favorites",
-                systemImage: "heart.slash"
+                "Cart is empty",
+                systemImage: "cart"
             )
         } description: {
-            Text("Your favorite products will appear here")
+            Text("Your added products will appear here")
         }
     }
 
-    // MARK: - Favorites Grid
+    // MARK: - Cart Grid
 
-    private var favoritesGrid: some View {
+    private var cartGrid: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(productsViewModel.favoriteProducts) { product in
+                ForEach(productsViewModel.cartProducts) { product in
                     NavigationLink(
                         value: Route.productDetail(product: product)
                     ) {
@@ -73,6 +72,8 @@ struct FavoritesView: View {
 }
 
 #Preview {
-    FavoritesView()
-        .environment(ProductsViewModel())
+    NavigationStack {
+        CartView()
+    }
+    .environment(ProductsViewModel())
 }

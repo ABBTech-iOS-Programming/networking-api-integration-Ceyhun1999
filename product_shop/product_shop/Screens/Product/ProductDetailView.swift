@@ -180,31 +180,35 @@ struct ProductDetailView: View {
 
     private var quantityControls: some View {
         HStack(spacing: 24) {
-            quantityButton(systemName: "minus")
+            Button {
+                productsViewModel.decreaseQuantity(for: product)
+            } label: {
+                quantityButtonLabel(systemName: "minus")
+            }
 
-            Text("1")
+            Text("\(productsViewModel.quantity(for: product))")
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.textPrimary)
 
-            quantityButton(systemName: "plus")
+            Button {
+                productsViewModel.increaseQuantity(for: product)
+            } label: {
+                quantityButtonLabel(systemName: "plus")
+            }
         }
     }
 
-    private func quantityButton(
+    private func quantityButtonLabel(
         systemName: String
     ) -> some View {
-        Button {
-
-        } label: {
-            Image(systemName: systemName)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(.textPrimary)
-                .frame(width: 42, height: 42)
-                .background(.surfaceSecondary)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 12)
-                )
-        }
+        Image(systemName: systemName)
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(.textPrimary)
+            .frame(width: 42, height: 42)
+            .background(.surfaceSecondary)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 12)
+            )
     }
 
     // MARK: - Price & Cart
@@ -216,25 +220,46 @@ struct ProductDetailView: View {
                     .font(.system(size: 11))
                     .foregroundStyle(.textSecondary)
 
-                Text("$\(product.price, specifier: "%.2f")")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(.accentPrimary)
+                Text(
+                    "$\(productsViewModel.discountedTotalPrice(for: product), specifier: "%.2f")"
+                )
+                .font(.system(size: 24, weight: .bold))
+                .foregroundStyle(.accentPrimary)
+
+                HStack(spacing: 8) {
+                    Text(
+                        "$\(productsViewModel.totalPrice(for: product), specifier: "%.2f")"
+                    )
+                    .font(.system(size: 12))
+                    .foregroundStyle(.textSecondary)
+                    .strikethrough()
+
+                    Text(
+                        "-\(product.discountPercentage, specifier: "%.1f")%"
+                    )
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.successForeground)
+                }
             }
 
             Spacer()
 
             Button {
-
+                productsViewModel.toggleCart(product)
             } label: {
-                Text("Add to Cart")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 58)
-                    .background(.accentPrimary)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 16)
-                    )
+                Text(
+                    productsViewModel.isInCart(product)
+                        ? "Remove from Cart"
+                        : "Add to Cart"
+                )
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 58)
+                .background(.accentPrimary)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 16)
+                )
             }
             .frame(maxWidth: 212)
         }
@@ -266,6 +291,7 @@ struct ProductDetailView: View {
                 title: "Essence Mascara Lash Princess",
                 description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
                 category: "beauty",
+                discountPercentage: 10.48,
                 price: 9.99,
                 rating: 2.56,
                 stock: 99,

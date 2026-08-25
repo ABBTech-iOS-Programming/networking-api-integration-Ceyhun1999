@@ -3,7 +3,16 @@ import SwiftUI
 
 struct ProductCardView: View {
 
+    // MARK: - Environment
+
+    @Environment(ProductsViewModel.self)
+    private var productsViewModel
+
+    // MARK: - Properties
+
     let product: Product
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 10) {
@@ -29,7 +38,9 @@ struct ProductCardView: View {
 
     private var productImage: some View {
         ZStack(alignment: .topLeading) {
-            WebImage(url: URL(string: product.thumbnail)) { image in
+            WebImage(
+                url: URL(string: product.thumbnail)
+            ) { image in
                 image
                     .resizable()
                     .scaledToFit()
@@ -108,6 +119,7 @@ struct ProductCardView: View {
             title: "Essence Mascara Lash Princess",
             description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects.",
             category: "beauty",
+            discountPercentage: 5,
             price: 9.99,
             rating: 2.56,
             stock: 99,
@@ -119,8 +131,9 @@ struct ProductCardView: View {
             reviews: [
                 Review(rating: 3),
                 Review(rating: 4),
-                Review(rating: 5)
+                Review(rating: 5),
             ]
         )
     )
+    .environment(ProductsViewModel())
 }
