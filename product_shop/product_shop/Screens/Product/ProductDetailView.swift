@@ -3,10 +3,20 @@ import SwiftUI
 
 struct ProductDetailView: View {
 
+    // MARK: - Properties
+
     let product: Product
 
-    @Environment(ProductsViewModel.self) private var productsViewModel
+    // MARK: - Environment
+
+    @Environment(ProductsViewModel.self)
+    private var productsViewModel
+
+    // MARK: - State
+
     @State private var selectedPage = 0
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -39,7 +49,9 @@ struct ProductDetailView: View {
     private var imageSlider: some View {
         TabView(selection: $selectedPage) {
             ForEach(product.images.indices, id: \.self) { index in
-                WebImage(url: URL(string: product.images[index])) { image in
+                WebImage(
+                    url: URL(string: product.images[index])
+                ) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -56,7 +68,9 @@ struct ProductDetailView: View {
             }
         }
         .frame(height: 258)
-        .tabViewStyle(.page(indexDisplayMode: .never))
+        .tabViewStyle(
+            .page(indexDisplayMode: .never)
+        )
     }
 
     // MARK: - Page Indicator
@@ -88,9 +102,11 @@ struct ProductDetailView: View {
                 .foregroundStyle(.textPrimary)
                 .font(.system(size: 20, weight: .bold))
 
-            Text("\(product.category.capitalized) • \(product.brand ?? "")")
-                .foregroundStyle(.textSecondary)
-                .font(.system(size: 12, weight: .medium))
+            Text(
+                "\(product.category.capitalized) • \(product.brand ?? "")"
+            )
+            .foregroundStyle(.textSecondary)
+            .font(.system(size: 12, weight: .medium))
         }
         .padding(.top, 18)
     }
@@ -114,7 +130,9 @@ struct ProductDetailView: View {
                 .foregroundStyle(.successForeground)
                 .padding(.horizontal, 25)
                 .padding(.vertical, 10)
-                .background(.successForeground.opacity(0.15))
+                .background(
+                    .successForeground.opacity(0.15)
+                )
                 .clipShape(Capsule())
         }
         .padding(.vertical, 16)
@@ -140,7 +158,6 @@ struct ProductDetailView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(.textSecondary)
                 .lineSpacing(4)
-
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 18)
@@ -173,7 +190,9 @@ struct ProductDetailView: View {
         }
     }
 
-    private func quantityButton(systemName: String) -> some View {
+    private func quantityButton(
+        systemName: String
+    ) -> some View {
         Button {
 
         } label: {
@@ -245,8 +264,7 @@ struct ProductDetailView: View {
             product: Product(
                 id: 1,
                 title: "Essence Mascara Lash Princess",
-                description:
-                    "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
+                description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
                 category: "beauty",
                 price: 9.99,
                 rating: 2.56,
@@ -258,8 +276,7 @@ struct ProductDetailView: View {
                     "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                     "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                 ],
-                thumbnail:
-                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+                thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
                 reviews: [
                     Review(rating: 3),
                     Review(rating: 4),

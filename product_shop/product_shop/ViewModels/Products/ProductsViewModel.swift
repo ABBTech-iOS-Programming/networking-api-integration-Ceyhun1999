@@ -9,26 +9,14 @@ final class ProductsViewModel {
     var products: [Product] = []
     var favoriteProductIDs: Set<Int> = []
     var state: ProductsViewState = .idle
-
     var selectedCategory: String = "All"
     var searchText: String = ""
 
     // MARK: - Computed Properties
-    func isFavorite(_ product: Product) -> Bool {
-        favoriteProductIDs.contains(product.id)
-    }
-    
+
     var favoriteProducts: [Product] {
         products.filter { product in
             favoriteProductIDs.contains(product.id)
-        }
-    }
-    
-    func toggleFavorite(_ product: Product) {
-        if favoriteProductIDs.contains(product.id) {
-            favoriteProductIDs.remove(product.id)
-        } else {
-            favoriteProductIDs.insert(product.id)
         }
     }
 
@@ -49,8 +37,20 @@ final class ProductsViewModel {
                 || product.title.localizedStandardContains(searchText))
         }
     }
-    
-    
+
+    // MARK: - Favorites
+
+    func isFavorite(_ product: Product) -> Bool {
+        favoriteProductIDs.contains(product.id)
+    }
+
+    func toggleFavorite(_ product: Product) {
+        if favoriteProductIDs.contains(product.id) {
+            favoriteProductIDs.remove(product.id)
+        } else {
+            favoriteProductIDs.insert(product.id)
+        }
+    }
 
     // MARK: - Networking
 

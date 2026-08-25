@@ -2,10 +2,12 @@ import SwiftUI
 
 struct HomeView: View {
 
-    // MARK: - State
+    // MARK: - Environment
 
-    @State private var navigationViewModel = NavigationViewModel()
-    @Environment(ProductsViewModel.self) private var productsViewModel
+    @Environment(ProductsViewModel.self)
+    private var productsViewModel
+
+    // MARK: - State
 
     @FocusState private var isSearchFocused: Bool
 
@@ -19,27 +21,21 @@ struct HomeView: View {
     // MARK: - Body
 
     var body: some View {
-        NavigationStack(path: $navigationViewModel.path) {
-            ZStack {
-                backgroundView
+        ZStack {
+            backgroundView
 
-                VStack(spacing: 20) {
-                    heroSection
-                    searchBar
-                    categoriesList
-                    content
-                }
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding(.horizontal, 24)
+            VStack(spacing: 20) {
+                heroSection
+                searchBar
+                categoriesList
+                content
             }
-            .task {
-                await productsViewModel.fetchPosts()
-            }
-            .navigationDestination(for: Route.self) { route in
-                navigationViewModel.destination(for: route)
-            }
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal, 24)
         }
-        .environment(productsViewModel)
+        .task {
+            await productsViewModel.fetchPosts()
+        }
     }
 
     // MARK: - Content
@@ -52,41 +48,59 @@ struct HomeView: View {
 
         case .loaded:
             if productsViewModel.filteredProducts.isEmpty {
-                ContentUnavailableView {
-                    Label(
-                        "Products not found",
-                        systemImage: "magnifyingglass"
-                    )
-                } description: {
-                    Text("Try changing your search or category")
-                }
+                productsNotFoundView
             } else {
                 productsScrollView
             }
 
         case .empty:
-            ContentUnavailableView {
-                Label(
-                    "Yenidən cəhd elə",
-                    systemImage: "exclamationmark.triangle"
-                )
-            } description: {
-                Text("No products")
-            }
+            emptyProductsView
 
         case .error(let message):
-            ContentUnavailableView {
-                Label(
-                    "Yenidən cəhd elə",
-                    systemImage: "exclamationmark.triangle"
-                )
-            } description: {
-                Text(message)
-            } actions: {
-                Button("Try again") {
-                    Task {
-                        await productsViewModel.fetchPosts()
-                    }
+            errorView(message)
+        }
+    }
+
+    // MARK: - Products Not Found
+
+    private var productsNotFoundView: some View {
+        ContentUnavailableView {
+            Label(
+                "Products not found",
+                systemImage: "magnifyingglass"
+            )
+        } description: {
+            Text("Try changing your search or category")
+        }
+    }
+
+    // MARK: - Empty Products
+
+    private var emptyProductsView: some View {
+        ContentUnavailableView {
+            Label(
+                "Yenidən cəhd elə",
+                systemImage: "exclamationmark.triangle"
+            )
+        } description: {
+            Text("No products")
+        }
+    }
+
+    // MARK: - Error
+
+    private func errorView(_ message: String) -> some View {
+        ContentUnavailableView {
+            Label(
+                "Yenidən cəhd elə",
+                systemImage: "exclamationmark.triangle"
+            )
+        } description: {
+            Text(message)
+        } actions: {
+            Button("Try again") {
+                Task {
+                    await productsViewModel.fetchPosts()
                 }
             }
         }
@@ -105,8 +119,7 @@ struct HomeView: View {
             ForEach(productsViewModel.filteredProducts) { product in
                 NavigationLink {
                     ProductDetailView(
-                        product: product,
-
+                        product: product
                     )
                 } label: {
                     ProductCardView(product: product)
@@ -245,5 +258,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    NavigationStack {
+        HomeView()
+    }
+    .environment(ProductsViewModel())
 }
