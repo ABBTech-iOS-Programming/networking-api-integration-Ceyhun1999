@@ -5,6 +5,7 @@ struct ProductDetailView: View {
 
     let product: Product
 
+    @Environment(ProductsViewModel.self) private var productsViewModel
     @State private var selectedPage = 0
 
     var body: some View {
@@ -139,7 +140,7 @@ struct ProductDetailView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(.textSecondary)
                 .lineSpacing(4)
-             
+
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 18)
@@ -226,9 +227,13 @@ struct ProductDetailView: View {
     private var favoriteToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
-                print("test")
+                productsViewModel.toggleFavorite(product)
             } label: {
-                Image(.heartIcon)
+                Image(
+                    systemName: productsViewModel.isFavorite(product)
+                        ? "heart.fill"
+                        : "heart"
+                )
             }
         }
     }
@@ -240,7 +245,8 @@ struct ProductDetailView: View {
             product: Product(
                 id: 1,
                 title: "Essence Mascara Lash Princess",
-                description: "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
+                description:
+                    "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula. The mascara provides excellent volume and helps create dramatic lashes for everyday use.",
                 category: "beauty",
                 price: 9.99,
                 rating: 2.56,
@@ -250,15 +256,17 @@ struct ProductDetailView: View {
                     "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                     "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                     "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
-                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp",
                 ],
-                thumbnail: "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+                thumbnail:
+                    "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
                 reviews: [
                     Review(rating: 3),
                     Review(rating: 4),
-                    Review(rating: 5)
+                    Review(rating: 5),
                 ]
             )
         )
     }
+    .environment(ProductsViewModel())
 }

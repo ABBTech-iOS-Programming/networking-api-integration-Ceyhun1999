@@ -8,7 +8,11 @@ enum Route: Hashable {
 @Observable
 final class NavigationViewModel {
 
+    // MARK: - Properties
+
     var path = NavigationPath()
+
+    // MARK: - Navigation
 
     func navigate(to route: Route) {
         path.append(route)
@@ -19,6 +23,8 @@ final class NavigationViewModel {
             path.removeLast()
         }
     }
+
+    // MARK: - Destination
 
     @ViewBuilder
     func destination(for route: Route) -> some View {

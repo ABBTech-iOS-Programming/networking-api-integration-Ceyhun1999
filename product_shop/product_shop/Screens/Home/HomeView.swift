@@ -4,10 +4,8 @@ struct HomeView: View {
 
     // MARK: - State
 
-    @State private var searchText = ""
-    @State private var selectedCategory = "All"
     @State private var navigationViewModel = NavigationViewModel()
-    @State private var productsViewModel = ProductsViewModel()
+    @Environment(ProductsViewModel.self) private var productsViewModel
 
     @FocusState private var isSearchFocused: Bool
 
@@ -18,7 +16,6 @@ struct HomeView: View {
         GridItem(.flexible()),
     ]
 
-    
     // MARK: - Body
 
     var body: some View {
@@ -42,6 +39,7 @@ struct HomeView: View {
                 navigationViewModel.destination(for: route)
             }
         }
+        .environment(productsViewModel)
     }
 
     // MARK: - Content
@@ -49,12 +47,22 @@ struct HomeView: View {
     @ViewBuilder
     private var content: some View {
         switch productsViewModel.state {
-
         case .idle, .loading:
             ProgressView("Loading")
 
         case .loaded:
-            productsScrollView
+            if productsViewModel.filteredProducts.isEmpty {
+                ContentUnavailableView {
+                    Label(
+                        "Products not found",
+                        systemImage: "magnifyingglass"
+                    )
+                } description: {
+                    Text("Try changing your search or category")
+                }
+            } else {
+                productsScrollView
+            }
 
         case .empty:
             ContentUnavailableView {
@@ -94,17 +102,18 @@ struct HomeView: View {
 
     private var productsGrid: some View {
         LazyVGrid(columns: columns, spacing: 16) {
-            ForEach(productsViewModel.products) { product in
+            ForEach(productsViewModel.filteredProducts) { product in
                 NavigationLink {
-                    ProductDetailView(product: product)
+                    ProductDetailView(
+                        product: product,
+
+                    )
                 } label: {
                     ProductCardView(product: product)
                 }
-
             }
         }
     }
-
 
     // MARK: - Background
 
@@ -166,12 +175,17 @@ struct HomeView: View {
     // MARK: - Search
 
     private var searchBar: some View {
-        HStack(spacing: 20) {
+        @Bindable var productsViewModel = productsViewModel
+
+        return HStack(spacing: 20) {
             Image(.searchIcon)
                 .frame(width: 16)
 
-            TextField("Search products", text: $searchText)
-                .focused($isSearchFocused)
+            TextField(
+                "Search products",
+                text: $productsViewModel.searchText
+            )
+            .focused($isSearchFocused)
         }
         .padding(.horizontal, 12)
         .frame(maxWidth: .infinity)
@@ -193,7 +207,10 @@ struct HomeView: View {
     private var categoriesList: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 12) {
-                ForEach(productsViewModel.categories, id: \.self) { category in
+                ForEach(
+                    productsViewModel.categories,
+                    id: \.self
+                ) { category in
                     categoryButton(category)
                 }
             }
@@ -205,19 +222,19 @@ struct HomeView: View {
 
     private func categoryButton(_ categoryName: String) -> some View {
         Button {
-            selectedCategory = categoryName
+            productsViewModel.selectedCategory = categoryName
         } label: {
             Text(categoryName)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(
-                    selectedCategory == categoryName
+                    productsViewModel.selectedCategory == categoryName
                         ? .white
                         : .textPrimary
                 )
                 .padding(.horizontal, 25)
                 .padding(.vertical, 12)
                 .background(
-                    selectedCategory == categoryName
+                    productsViewModel.selectedCategory == categoryName
                         ? .accentPrimary
                         : .surfaceSecondary
                 )

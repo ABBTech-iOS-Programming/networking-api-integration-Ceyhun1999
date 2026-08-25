@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
 
     @State private var selectedTab: TabItem = .home
+    @State private var productsViewModel = ProductsViewModel()
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -14,7 +15,7 @@ struct MainTabView: View {
             }
 
             Tab(value: .favorites) {
-                Text("Favorites")
+                FavoritesView()
             } label: {
                 Image(systemName: selectedTab == .favorites ? "heart.fill" : "heart")
             }
@@ -32,6 +33,7 @@ struct MainTabView: View {
             }
         }
         .tint(.accentPrimary)
+        .environment(productsViewModel)
     }
 }
 

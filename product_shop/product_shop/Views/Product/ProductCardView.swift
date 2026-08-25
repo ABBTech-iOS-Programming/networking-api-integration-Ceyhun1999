@@ -38,6 +38,7 @@ struct ProductCardView: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 108)
+            .background(Color(.systemGray6))
             .clipped()
             .clipShape(
                 RoundedRectangle(cornerRadius: 14)
