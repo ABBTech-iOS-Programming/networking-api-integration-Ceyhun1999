@@ -71,7 +71,7 @@ struct ProductCardView: View {
                 .foregroundStyle(.textPrimary)
                 .multilineTextAlignment(.leading)
 
-            Text(product.brand ?? "")
+            Text(product.brand ?? product.category.capitalized)
                 .font(.system(size: 10, weight: .regular))
                 .foregroundStyle(.textSecondary)
         }
@@ -96,7 +96,7 @@ struct ProductCardView: View {
 
     private var addButton: some View {
         Button {
-            print("test")
+            productsViewModel.addToCart(product)
         } label: {
             Image(.plusIcon)
                 .resizable()

@@ -22,7 +22,11 @@ struct CartView: View {
 
             Group {
                 if productsViewModel.cartProducts.isEmpty {
-                    emptyState
+                    EmptyStateView(
+                        title: "Cart is empty",
+                        systemImage: "cart",
+                        description: "Your added products will appear here"
+                    )
                 } else {
                     cartGrid
                 }
@@ -37,19 +41,6 @@ struct CartView: View {
     private var backgroundView: some View {
         Color(.backgroundPrimary)
             .ignoresSafeArea()
-    }
-
-    // MARK: - Empty State
-
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label(
-                "Cart is empty",
-                systemImage: "cart"
-            )
-        } description: {
-            Text("Your added products will appear here")
-        }
     }
 
     // MARK: - Cart Grid

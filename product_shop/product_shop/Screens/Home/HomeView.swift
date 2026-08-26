@@ -34,7 +34,10 @@ struct HomeView: View {
             .padding(.horizontal, 24)
         }
         .task {
-            await productsViewModel.fetchPosts()
+            await productsViewModel.fetchCategories()
+            await productsViewModel.fetchProducts(
+                for: productsViewModel.selectedCategory
+            )
         }
     }
 
@@ -48,59 +51,33 @@ struct HomeView: View {
 
         case .loaded:
             if productsViewModel.filteredProducts.isEmpty {
-                productsNotFoundView
+                EmptyStateView(
+                    title: "Products not found",
+                    systemImage: "magnifyingglass",
+                    description: "Try changing your search or category"
+                )
             } else {
                 productsScrollView
             }
 
         case .empty:
-            emptyProductsView
+            EmptyStateView(
+                title: "Yenidən cəhd elə",
+                systemImage: "exclamationmark.triangle",
+                description: "No products"
+            )
 
         case .error(let message):
-            errorView(message)
-        }
-    }
-
-    // MARK: - Products Not Found
-
-    private var productsNotFoundView: some View {
-        ContentUnavailableView {
-            Label(
-                "Products not found",
-                systemImage: "magnifyingglass"
-            )
-        } description: {
-            Text("Try changing your search or category")
-        }
-    }
-
-    // MARK: - Empty Products
-
-    private var emptyProductsView: some View {
-        ContentUnavailableView {
-            Label(
-                "Yenidən cəhd elə",
-                systemImage: "exclamationmark.triangle"
-            )
-        } description: {
-            Text("No products")
-        }
-    }
-
-    // MARK: - Error
-
-    private func errorView(_ message: String) -> some View {
-        ContentUnavailableView {
-            Label(
-                "Yenidən cəhd elə",
-                systemImage: "exclamationmark.triangle"
-            )
-        } description: {
-            Text(message)
-        } actions: {
-            Button("Try again") {
+            ErrorStateView(
+                title: "Yenidən cəhd elə",
+                systemImage: "exclamationmark.triangle",
+                description: message
+            ) {
                 Task {
-                    await productsViewModel.fetchPosts()
+                    await productsViewModel.fetchCategories()
+                    await productsViewModel.fetchProducts(
+                        for: productsViewModel.selectedCategory
+                    )
                 }
             }
         }
@@ -113,8 +90,11 @@ struct HomeView: View {
             productsGrid
         }
         .refreshable {
-               await productsViewModel.fetchPosts()
-           }
+            await productsViewModel.fetchCategories()
+            await productsViewModel.fetchProducts(
+                for: productsViewModel.selectedCategory
+            )
+        }
     }
 
     private var productsGrid: some View {
@@ -127,6 +107,7 @@ struct HomeView: View {
                 } label: {
                     ProductCardView(product: product)
                 }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -239,6 +220,10 @@ struct HomeView: View {
     private func categoryButton(_ categoryName: String) -> some View {
         Button {
             productsViewModel.selectedCategory = categoryName
+
+            Task {
+                await productsViewModel.fetchProducts(for: categoryName)
+            }
         } label: {
             Text(categoryName)
                 .font(.system(size: 12, weight: .semibold))

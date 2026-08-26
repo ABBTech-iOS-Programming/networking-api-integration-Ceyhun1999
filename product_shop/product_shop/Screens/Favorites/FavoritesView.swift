@@ -22,7 +22,11 @@ struct FavoritesView: View {
 
             Group {
                 if productsViewModel.favoriteProducts.isEmpty {
-                    emptyState
+                    EmptyStateView(
+                        title: "No favorites",
+                        systemImage: "heart.slash",
+                        description: "Your favorite products will appear here"
+                    )
                 } else {
                     favoritesGrid
                 }
@@ -38,19 +42,6 @@ struct FavoritesView: View {
     private var backgroundView: some View {
         Color(.backgroundPrimary)
             .ignoresSafeArea()
-    }
-
-    // MARK: - Empty State
-
-    private var emptyState: some View {
-        ContentUnavailableView {
-            Label(
-                "No favorites",
-                systemImage: "heart.slash"
-            )
-        } description: {
-            Text("Your favorite products will appear here")
-        }
     }
 
     // MARK: - Favorites Grid

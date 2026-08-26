@@ -7,79 +7,69 @@ final class ProductsViewModel {
     // MARK: - Properties
 
     var products: [Product] = []
-    var favoriteProductIDs: Set<Int> = []
-    var cartProductIDs: Set<Int> = []
+    var favoriteProducts: [Product] = []
+    var cartProducts: [Product] = []
     var productQuantities: [Int: Int] = [:]
 
     var state: ProductsViewState = .idle
     var selectedCategory: String = "All"
     var searchText: String = ""
+    var categories: [String] = []
 
     // MARK: - Computed Properties
 
-    var favoriteProducts: [Product] {
-        products.filter { product in
-            favoriteProductIDs.contains(product.id)
-        }
-    }
-
-    var cartProducts: [Product] {
-        products.filter { product in
-            cartProductIDs.contains(product.id)
-        }
-    }
-
-    var categories: [String] {
-        let uniqueCategories = Set(
-            products.map { $0.category.capitalized }
-        )
-
-        return ["All"] + uniqueCategories.sorted()
-    }
-
     var filteredProducts: [Product] {
         products.filter { product in
-            (selectedCategory == "All"
-                || product.category.capitalized == selectedCategory)
-            &&
-            (searchText.isEmpty
-                || product.title.localizedStandardContains(searchText))
+            searchText.isEmpty
+                || product.title.localizedStandardContains(searchText)
         }
     }
 
     // MARK: - Favorites
 
     func isFavorite(_ product: Product) -> Bool {
-        favoriteProductIDs.contains(product.id)
+        favoriteProducts.contains { favoriteProduct in
+            favoriteProduct.id == product.id
+        }
     }
 
     func toggleFavorite(_ product: Product) {
-        if favoriteProductIDs.contains(product.id) {
-            favoriteProductIDs.remove(product.id)
+        if isFavorite(product) {
+            favoriteProducts.removeAll { favoriteProduct in
+                favoriteProduct.id == product.id
+            }
         } else {
-            favoriteProductIDs.insert(product.id)
+            favoriteProducts.append(product)
         }
     }
 
     // MARK: - Cart
 
     func addToCart(_ product: Product) {
-        cartProductIDs.insert(product.id)
+        if isInCart(product) {
+            return
+        }
+
+        cartProducts.append(product)
     }
 
     func removeFromCart(_ product: Product) {
-        cartProductIDs.remove(product.id)
+        cartProducts.removeAll { cartProduct in
+            cartProduct.id == product.id
+        }
     }
 
     func isInCart(_ product: Product) -> Bool {
-        cartProductIDs.contains(product.id)
+        cartProducts.contains { cartProduct in
+            cartProduct.id == product.id
+        }
     }
 
     func toggleCart(_ product: Product) {
-        if cartProductIDs.contains(product.id) {
-            cartProductIDs.remove(product.id)
+        if isInCart(product) {
+            removeFromCart(product)
         } else {
-            cartProductIDs.insert(product.id)
+            addToCart(product)
         }
     }
 
@@ -122,10 +112,54 @@ final class ProductsViewModel {
 
     // MARK: - Networking
 
-    func fetchPosts() async {
+    func fetchCategories() async {
+        let urlString = "https://dummyjson.com/products/category-list"
+
+        guard let url = URL(string: urlString) else {
+            state = .error("Invalid url")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        do {
+            let (data, response) = try await URLSession.shared.data(
+                for: request
+            )
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                state = .error("Invalid response")
+                return
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                state = .error("Server xetasi")
+                return
+            }
+
+            let decodedData = try JSONDecoder().decode(
+                [String].self,
+                from: data
+            )
+
+            categories = ["All"] + decodedData.map { $0.capitalized }
+
+        } catch {
+            state = .error(error.localizedDescription)
+        }
+    }
+
+    func fetchProducts(for category: String) async {
         state = .loading
 
-        let urlString = "https://dummyjson.com/products"
+        let urlString: String
+
+        if category == "All" {
+            urlString = "https://dummyjson.com/products?limit=0"
+        } else {
+            urlString = "https://dummyjson.com/products/category/\(category.lowercased())"
+        }
 
         guard let url = URL(string: urlString) else {
             state = .error("Invalid url")
